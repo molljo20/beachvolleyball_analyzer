@@ -1,0 +1,12 @@
+streamlit
+opencv-python
+ultralytics
+norfair
+pandas
+plotly
+matplotlib
+numpy
+reportlab
+tensorflow
+pillow
+ffmpeg-python
