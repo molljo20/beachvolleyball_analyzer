@@ -7,20 +7,23 @@ from collections import defaultdict
 import pandas as pd
 
 st.set_page_config(layout="wide")
-st.title("🏐 Beachvolleyball Video Analyzer (offizielles Roboflow SDK)")
+st.title("🏐 Beachvolleyball Video Analyzer")
 
 # API-Key aus Secrets
 try:
     api_key = st.secrets["ROBOFLOW_API_KEY"]
 except KeyError:
-    st.error("❌ Kein API-Key in den Secrets. Bitte lege ROBOFLOW_API_KEY fest.")
+    st.error("❌ Kein API-Key in den Secrets.")
     st.stop()
 
-# Initialisiere Client (wie im offiziellen Snippet)
+# Roboflow Client
 client = InferenceHTTPClient.init(
     api_url="https://serverless.roboflow.com",
     api_key=api_key
 )
+
+# ✅ Richtige Modell-ID: project_id/version_id (ohne Workspace)
+MODEL_ID = "volleyball-activity-dataset/1"
 
 uploaded_file = st.file_uploader("Video hochladen (MP4, kurz für Demo)", type=["mp4", "mov"])
 
@@ -31,7 +34,6 @@ if st.button("Analyse starten") and uploaded_file:
 
     with st.spinner("Analysiere Video Frame für Frame (max. 100 Frames)..."):
         cap = cv2.VideoCapture(video_path)
-        fps = cap.get(cv2.CAP_PROP_FPS)
         frame_idx = 0
         max_frames = 100
         action_counts = defaultdict(int)
@@ -41,14 +43,12 @@ if st.button("Analyse starten") and uploaded_file:
             if not ret:
                 break
 
-            # Speichere Frame temporär als Bild (SDK erwartet Dateipfad oder Bild-Array)
-            # Das SDK kann auch numpy-Arrays, aber der Einfachheit halber speichern wir kurz als JPG
+            # Frame als temporäres Bild speichern
             temp_img = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg')
             cv2.imwrite(temp_img.name, frame)
 
             try:
-                # Rufe die Inferenz mit dem Workflow "detect-count-and-visualize" auf
-                result = client.infer(temp_img.name, model_id="activity-graz-uni/volleyball-activity-dataset/1")
+                result = client.infer(temp_img.name, model_id=MODEL_ID)
                 predictions = result.get('predictions', [])
                 for pred in predictions:
                     class_name = pred.get('class')
