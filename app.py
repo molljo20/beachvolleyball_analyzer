@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 st.set_page_config(layout="wide")
-st.title("🏐 Beachvolleyball Video Analyzer")
+st.title("🏐 Beachvolleyball Anayse-Tool")
 
 # API-Key sicher aus Streamlit Secrets holen
 try:
