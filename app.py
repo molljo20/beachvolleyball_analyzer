@@ -23,7 +23,7 @@ client = InferenceHTTPClient.init(
 )
 
 # ✅ Richtige Modell-ID: project_id/version_id (ohne Workspace)
-MODEL_ID = "volleyball-activity-dataset/1"
+MODEL_ID = "volleyball-activity-dataset/3"
 
 uploaded_file = st.file_uploader("Video hochladen (MP4, kurz für Demo)", type=["mp4", "mov"])
 
