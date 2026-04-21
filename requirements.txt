@@ -2,3 +2,7 @@ streamlit
 inference-sdk
 opencv-python-headless
 numpy
+pandas
+matplotlib
+reportlab
+ffmpeg-python
